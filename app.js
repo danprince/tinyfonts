@@ -6,6 +6,7 @@ import { drawText, Font, measureText, wrapText } from "./font.js";
  *
  * @typedef {object} Snapshot
  * A serialisable snapshot of the current state of the app.
+ * @prop {number} version
  * @prop {string} previewText
  * @prop {string} previewForegroundColor
  * @prop {string} previewBackgroundColor
@@ -28,9 +29,16 @@ import { drawText, Font, measureText, wrapText } from "./font.js";
  */
 
 /**
+ * Increment this value if there's a breaking change to the snapshot format.
+ */
+const snapshotVersion = 1;
+
+/**
  * @type {Snapshot}
  */
 let emptySnapshot = {
+  version: snapshotVersion,
+
   previewText:
     "In the realm of design, tiny fonts possess a peculiar charm. Each letter—delicately crafted—balances clarity and character within the constraints of minimal space. They whisper stories, where larger typefaces would shout. The subtle interplay of pixels invites closer inspection. Even the simplest glyph, whether 'A' or 'z', serves a purpose, proving that elegance can flourish in the smallest details. Tiny fonts remind us: perfection lies not in size, but in precision.",
   previewForegroundColor: "#000000",
@@ -455,6 +463,7 @@ class App {
    */
   getSnapshot() {
     return {
+      version: snapshotVersion,
       previewText: this.previewText,
       previewForegroundColor: this.previewForegroundColor,
       previewBackgroundColor: this.previewBackgroundColor,
@@ -481,6 +490,11 @@ class App {
    * @param {Snapshot} snapshot
    */
   async loadSnapshot(snapshot) {
+    if (snapshot.version !== snapshotVersion) {
+      this.showPopup("Could not load saved font!");
+      return;
+    }
+
     let texture = new Image();
     texture.src = snapshot.textureUrl;
     await texture.decode();
