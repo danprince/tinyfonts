@@ -50,7 +50,7 @@ let emptySnapshot = {
   previewBackgroundTransparency: false,
   previewTextWrappingEnabled: true,
 
-  textureUrl: "/fonts/5x8.png",
+  textureUrl: "fonts/5x8.png",
   glyphWidth: 5,
   glyphHeight: 8,
   lineHeight: 9,
