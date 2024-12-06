@@ -440,11 +440,10 @@ class App {
       event.preventDefault();
     }
 
-    if (key === "e") {
-      this.exportJavaScript();
-    }
     if (shiftKey && key === "N") {
       this.createNewFont();
+    } else if (key === "e") {
+      this.exportJavaScript();
     } else if (shiftKey && left) {
       this.setXOffset(selectedCharCode, xOffset - 1);
     } else if (shiftKey && right) {
