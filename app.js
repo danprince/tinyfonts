@@ -367,8 +367,9 @@ class App {
     canvas.height = textHeight + this.previewPadding * 2;
 
     if (!this.previewTextWrappingEnabled) {
-      let bounds = measureText(font, lines[0]);
-      canvas.width = bounds.width + this.previewPadding * 2;
+      let widths = lines.map(line => measureText(font, line).width);
+      let maxWidth = Math.max(...widths);
+      canvas.width = maxWidth + this.previewPadding * 2;
     }
 
     ctx.imageSmoothingEnabled = true;
