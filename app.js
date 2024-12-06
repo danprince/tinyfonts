@@ -85,9 +85,9 @@ The committee unanimously approved the bill after much discussion.`,
 
 "Hello!" she called. "Is anyone there?" Silence. Then—footsteps, slow and deliberate.`,
   "Descenders & Ascenders": `Quickly jumping over the fence, the lazy dog followed a pack of wolves. Tall letters like l, t, and h create sharp contrasts with the sweeping descenders of y, g, and p.`,
-  Dialogue: `"Do you think it’s true?" asked John.
-"Well," replied Sarah, “I’m not sure, but I’ve heard rumors."
-"I guess we’ll find out soon enough," he said, stepping into the shadows.`,
+  Dialogue: `"Do you think it's true?" asked John.
+"Well," replied Sarah, “I'm not sure, but I've heard rumors."
+"I guess we'll find out soon enough," he said, stepping into the shadows.`,
   Numeric: `The rocket launched at exactly 3:21 PM, climbing to an altitude of 12,500 feet in just 47 seconds. By 8:00 PM, it had reached orbit, traveling at a speed of 17,500 miles per hour.
 
 The formula requires 3.14159 liters of water at 72.5 degrees Fahrenheit. Weights must be between 0.25 and 5.75 kilograms, and lengths must not exceed 1,500 millimeters.
