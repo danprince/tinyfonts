@@ -3,302 +3,207 @@
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Pixel font playground</title>
-    <link rel="stylesheet" href="style.css" />
+    <title>Tiny Fonts</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link rel="icon" href="/assets/icon.png" />
   </head>
-  <body x-data="init()" x-init="mount()" @beforeunload.window="unmount()">
-    <aside class="sidebar">
-      <fieldset x-show="!hasTexture()">
-        <legend>Upload texture</legend>
-        <p>Paste, drag and drop, or upload a bitmap font image.</p>
-        <input type="file" />
-      </fieldset>
 
-      <fieldset x-show="hasTexture">
-        <button @click="reset()">New</button>
-        <button disabled>Export</button>
-      </fieldset>
+  <body
+    x-data="new App()"
+    x-init="mount()"
+    @beforeunload.window="unmount()"
+    @keydown="handleKeyDown($event)"
+  >
+    <nav class="menu">
+      <img src="/assets/logo.png" height="25px" style="image-rendering: pixelated" />
 
-      <fieldset>
-        <legend>Font</legend>
-        <div>
-          <button data-step="-1">-</button>
+      <div class="grow"></div>
+
+      <div class="control-group">
+        <label class="control number-control" title="Glyph width">
           <input
-            id="glyphWidth"
-            x-model.number="glyphWidth"
             type="number"
-            min="1"
-            max="999"
-          />
-          <button data-step="+1">+</button>
-          <label for="glyphWidth">Glyph width</label>
-        </div>
-        <div>
-          <button data-step="-1">-</button>
-          <input
-            id="glyphHeight"
-            x-model.number="glyphHeight"
-            type="number"
-            min="1"
-            max="999"
-          />
-          <button data-step="+1">+</button>
-          <label for="glyphHeight">Glyph height</label>
-        </div>
-        <div>
-          <button data-step="-1">-</button>
-          <input
-            id="lineHeight"
-            x-model.number="lineHeight"
-            type="number"
-            min="1"
-            max="999"
-            :placeholder="glyphHeight"
-          />
-          <button data-step="+1">+</button>
-          <label for="lineHeight">Line height</label>
-        </div>
-        <div>
-          <button data-step="-1">-</button>
-          <input
-            id="startCharCode"
-            x-model.number="startCharCode"
-            type="number"
+            x-model.number="font.glyphWidth"
             min="0"
             max="999"
-            placeholder="32"
           />
-          <button data-step="1">+</button>
-          <label for="startCharCode">Start char code</label>
-        </div>
-        <div>
-          <button data-step="-1">-</button>
+        </label>
+        /
+        <label class="control number-control" title="Glyph height">
           <input
-            id="endCharCode"
-            x-model.number="endCharCode"
             type="number"
+            x-model.number="font.glyphHeight"
             min="0"
             max="999"
-            placeholder="128"
           />
-          <button data-step="1">+</button>
-          <label for="endCharCode">End char code</label>
-        </div>
-      </fieldset>
-
-      <fieldset class="glyph-form">
-        <legend>Glyphs</legend>
-
-        <div class="glyph-preview">
-          <canvas
-            style="height: 64px"
-            x-effect="renderGlyphWithMetrics($el, currentGlyph)"
-          ></canvas>
-        </div>
-
-        <div class="glyph-metrics">
-          <div>
-            <button data-step="-1">&lt;</button>
-            <input
-              id="currentGlyph"
-              x-model.number="currentGlyph"
-              type="number"
-              min="0"
-              max="999"
-              :placeholder="0"
-            />
-            <button data-step="1">&gt;</button>
-            <label for="currentGlyph">
-              Glyph (<span x-text="String.fromCharCode(currentGlyph)"></span>)
-            </label>
-          </div>
-
-          <div>
-            <button data-step="-1">-</button>
-            <input
-              id="advanceWidth"
-              x-model.number="advanceWidths[currentGlyph]"
-              type="number"
-              min="1"
-              max="999"
-              :placeholder="glyphWidth"
-            />
-            <button data-step="1">+</button>
-            <label for="advanceWidth">Advance width</label>
-          </div>
-
-          <div>
-            <button data-step="-1">-</button>
-            <input
-              id="xOffset"
-              x-model.number="xOffsets[currentGlyph]"
-              type="number"
-              min="-999"
-              max="999"
-              placeholder="0"
-            />
-            <button data-step="1">+</button>
-            <label for="xOffset">X offset</label>
-          </div>
-
-          <div>
-            <button data-step="-1">-</button>
-            <input
-              id="yOffset"
-              x-model.number="yOffsets[currentGlyph]"
-              type="number"
-              min="-999"
-              max="999"
-              placeholder="0"
-            />
-            <button data-step="1">+</button>
-            <label for="yOffset">Y offset</label>
-          </div>
-        </div>
-
-        <div class="glyphs">
-          <template x-for="index in (endCharCode - startCharCode)">
-            <button
-              class="glyph"
-              :data-glyph="index - 1 + startCharCode"
-              @click="currentGlyph = index - 1 + startCharCode"
-            >
-              <canvas
-                x-effect="renderGlyph($el, index - 1 + startCharCode)"
-              ></canvas>
-            </button>
-          </template>
-        </div>
-      </fieldset>
-
-      <fieldset>
-        <legend>Previews</legend>
-
-        <div>
-          <input id="textColor" type="color" x-model="textColor" />
-          <label for="textColor">Color</label>
-        </div>
-
-        <div>
-          <input id="backgroundColor" type="color" x-model="backgroundColor" />
-          <label for="backgroundColor">Background</label>
-        </div>
-
-        <div>
-          <input id="strokeColor" type="color" x-model="strokeColor" />
-          <label for="strokeColor">Stroke</label>
-        </div>
-
-        <div>
+        </label>
+        /
+        <label class="control number-control" title="Line height">
           <input
-            id="strokeBits"
             type="number"
-            x-model="strokeBits"
-            min="0"
-            max="256"
-          />
-          <label for="strokeBits">Stroke bits</label>
-        </div>
-        <div class="stroke-bits">
-          <button :data-mask="strokeBits & 32" @click="strokeBits ^= 32">
-            ↖
-          </button>
-          <button :data-mask="strokeBits & 64" @click="strokeBits ^= 64">
-            ↑
-          </button>
-          <button :data-mask="strokeBits & 128" @click="strokeBits ^= 128">
-            ↗
-          </button>
-          <button :data-mask="strokeBits & 16" @click="strokeBits ^= 16">
-            ←
-          </button>
-          <button :data-mask="strokeBits & 1" @click="strokeBits ^= 1">
-            →
-          </button>
-          <button :data-mask="strokeBits & 8" @click="strokeBits ^= 8">
-            ↙
-          </button>
-          <button :data-mask="strokeBits & 4" @click="strokeBits ^= 4">
-            ↓
-          </button>
-          <button :data-mask="strokeBits & 2" @click="strokeBits ^= 2">
-            ↘
-          </button>
-          <button @click="strokeBits = 0">🗑️</button>
-        </div>
-        <div>
-          <button data-step="-1">-</button>
-          <input
-            id="padding"
-            type="number"
-            x-model.number="padding"
+            x-model.number="font.lineHeight"
             min="0"
             max="999"
-            placeholder="0"
           />
-          <button data-step="+1">+</button>
-          <label for="padding">Padding</label>
-        </div>
-      </fieldset>
-      <fieldset>
-        <legend>Export JavaScript</legend>
-        <textarea
-          class="code-export"
-          readonly
-          style="width: 100%"
-          x-init="autoresize($el)"
-          x-text="generateJavaScript()"
-          @focus="$el.select()"
-        ></textarea>
-      </fieldset>
-    </aside>
+        </label>
+        /
+        <label class="control number-control" title="Start char code">
+          <input
+            type="number"
+            x-model.number="font.startCharCode"
+            min="0"
+            max="999"
+          />
+        </label>
+      </div>
 
-    <main class="viewer">
-      <div class="content">
-        <template x-for="preview of previews">
-          <div class="preview">
-            <h3 x-text="preview.title"></h3>
+      <div class="grow"></div>
 
-            <input
-              x-show="preview.wrap"
-              x-model="preview.text"
-              placeholder="Enter some preview text"
-            />
+      <button class="control button-control" @click="createNewFont()">
+        New
+      </button>
+      <button class="control button-control" @click="exportJavaScript()">
+        Export
+      </button>
 
-            <textarea
-              x-show="!preview.wrap"
-              x-model="preview.text"
-              x-init="autoresize($el)"
-              placeholder="Enter some preview text here"
-            ></textarea>
+      <a href="https://github.com/danprince/tinyfonts" target="_blank">
+        <button class="control button-control">Help</button>
+      </a>
 
-            <div x-show="preview.custom">
-              <div>
-                <button data-step="-1">-</button>
-                <input
-                  type="number"
-                  x-model.number="preview.width"
-                  min="1"
-                  max="999"
-                />
-                <button data-step="+1">+</button>
-                <label>Width</label>
-              </div>
-              <div>
-                <input type="checkbox" x-model.boolean="preview.wrap" />
-                <label>Wrap text?</label>
-              </div>
-            </div>
+      <a href="https://github.com/danprince/tinyfonts" target="_blank">
+        <img src="/assets/github.svg" width="20" />
+      </a>
+    </nav>
 
+    <!-- Editor -->
+    <div class="editor">
+      <div class="editor-grid">
+        <template x-for="cell in getEditorGridCells()">
+          <button
+            class="editor-glyph"
+            :data-selected="cell.charCode === selectedCharCode"
+            @click="selectedCharCode = cell.charCode"
+          >
+            <div
+              class="editor-glyph-advance"
+              :style="{ width: `${cell.advance * editorScaling}px` }"
+              x-show="cell.charCode === selectedCharCode"
+            ></div>
             <canvas
-              :width="preview.width"
-              x-effect="renderText($el, preview.text, preview.wrap)"
+              x-effect="renderEditorGlyph($el, cell.charCode)"
+              :style="{
+                left: `${cell.xOffset * editorScaling}px`,
+                top: `${cell.yOffset * editorScaling}px`,
+              }"
             ></canvas>
-          </div>
+          </button>
         </template>
       </div>
-    </main>
+    </div>
+
+    <!-- Menu -->
+    <nav class="menu">
+      <div class="control-group">
+        <label class="control color-control" title="Foreground color">
+          <input type="color" x-model="previewForegroundColor" />
+          <span
+            class="swatch"
+            :style="{ background: previewForegroundColor }"
+          ></span>
+        </label>
+        /
+        <label class="control color-control" title="Background color">
+          <input type="color" x-model="previewBackgroundColor" />
+          <span
+            class="swatch"
+            :style="{ background: previewBackgroundColor }"
+          ></span>
+        </label>
+        /
+        <label class="control color-control" title="Stroke color">
+          <input type="color" x-model="previewStrokeColor" />
+          <span
+            class="swatch"
+            :style="{ background: previewStrokeColor }"
+          ></span>
+        </label>
+        /
+        <label class="control number-control" title="Stroke bits">
+          <input
+            type="number"
+            x-model.number="previewStrokeBits"
+            min="0"
+            max="255"
+          />
+        </label>
+      </div>
+
+      <div class="grow"></div>
+
+      <div class="control-group">
+        <label class="control number-control" title="Preview width">
+          <input
+            type="number"
+            x-model.number="previewCanvasWidth"
+            min="1"
+            max="999"
+          />
+        </label>
+        /
+        <label class="control number-control" title="Padding">
+          <input
+            type="number"
+            x-model.number="previewPadding"
+            min="0"
+            max="99"
+          />
+        </label>
+      </div>
+
+      <div class="grow"></div>
+
+      <label class="control checkbox-control">
+        <input type="checkbox" x-model.boolean="previewTextWrappingEnabled" />
+        Wrap
+      </label>
+
+      <label class="control checkbox-control">
+        <input
+          type="checkbox"
+          x-model.boolean="previewBackgroundTransparency"
+        />
+        Alpha
+      </label>
+
+      <select @change="previewText = specimens[$el.value]">
+        <optgroup label="Specimens">
+          <template x-for="(text, id) in specimens">
+            <option :value="id" x-text="id"></option>
+          </template>
+        </optgroup>
+      </select>
+    </nav>
+
+    <!-- Preview -->
+    <canvas
+      class="preview"
+      id="preview-canvas"
+      x-effect="renderPreview()"
+    ></canvas>
+
+    <textarea
+      class="preview-textarea"
+      placeholder="Enter some text here..."
+      x-model="previewText"
+    ></textarea>
+
+    <div
+      class="popup"
+      x-text="popupMessage"
+      :class="popupMessageVisible && 'show'"
+    ></div>
   </body>
-  <script type="module" src="app.js"></script>
+
+  <script type="module" src="/app.js"></script>
   <script defer src="//unpkg.com/alpinejs"></script>
 </html>

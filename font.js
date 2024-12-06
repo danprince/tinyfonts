@@ -1,6 +1,8 @@
 // @ts-check
 
 /**
+ * @typedef {Record<string | number, number | undefined>} Table
+ *
  * @typedef {object} FontSettings
  * @prop {number} glyphWidth The width of each glyph in pixels.
  * @prop {number} glyphHeight The height of each glyph in pixels.
@@ -10,15 +12,17 @@
  * Defaults to 32 (`" "`).
  * @prop {number} [endCharCode] The char code of the last glyph in the font.
  * Defaults to 128.
- * @prop {Record<string, number>} [codepage] An optional codepage for mapping glyphs with codes
+ * @prop {Table} [codepage] An optional codepage for mapping glyphs with codes
  * outside the font's normal range.
- * @prop {Record<string, number>} [advanceWidths] Optional table of advance widths. The advance
+ * @prop {Table} [advanceWidths] Optional table of advance widths. The advance
  * width is the number of pixels that the cursor will advance after drawing
  * specific glyphs.
- * @prop {Record<string, number>} [xOffsets] Optional table of offsets in pixels that describe
- * how far to horizontally offset specific glyphs when drawing them.
- * @prop {Record<string, number>} [yOffsets] Optional table of offsets in pixels that describe
- * how far to vertically offset specific glyphs when drawing them.
+ * @prop {Table} [xOffsets] Optional table of
+ * offsets in pixels that describe how far to horizontally offset specific
+ * glyphs when drawing them.
+ * @prop {Table} [yOffsets]
+ * Optional table of offsets in pixels that describe how far to vertically
+ * offset specific glyphs when drawing them.
  */
 
 export class Font {
@@ -107,8 +111,8 @@ export class Font {
 
 /**
  * Converts any non-numeric keys into their respective character code (glyph).
- * @param {Record<string, number>} table
- * @returns {Record<number, number>}
+ * @param {Table} table
+ * @returns {Table}
  */
 function normalizeGlyphKeys(table) {
   return Object.fromEntries(
