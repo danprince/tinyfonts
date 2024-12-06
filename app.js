@@ -297,9 +297,12 @@ class App {
       return;
     }
 
-    // We'll guess the glyph sizes, assuming the font's layout is 16x6.
-    let glyphWidth = Math.ceil(image.width / 16);
-    let glyphHeight = Math.ceil(image.height / 6);
+    let columns = 16;
+    let rows = image.width === image.height ? 16 : 6;
+
+    // Guess the glyph sizes, from our guess at the font layout.
+    let glyphWidth = Math.ceil(image.width / columns);
+    let glyphHeight = Math.ceil(image.height / rows);
 
     // TODO: Guess the advance widths based on the actual pixels in each glyph
 
