@@ -391,7 +391,9 @@ class App {
     }
 
     return (
-      event.target.tagName === "INPUT" || event.target.tagName === "TEXTAREA"
+      event.target.tagName === "INPUT" ||
+      event.target.tagName === "TEXTAREA" ||
+      event.target.tagName === "SELECT"
     );
   }
 
