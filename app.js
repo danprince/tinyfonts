@@ -147,7 +147,12 @@ class App {
    * Determines the scale factor used when rendering the glyphs in the editor.
    */
   get editorScaling() {
-    return Math.floor(700 / (GRID_COLUMNS * this.font.glyphWidth));
+    let columns = this.font.columns();
+    let rows = this.font.rows();
+    let scale = 2 * (16 / rows);
+    let min = 1;
+    let max = 700 / (columns * this.font.glyphWidth);
+    return Math.max(min, Math.min(max, scale));
   }
 
   get isDarkMode() {
