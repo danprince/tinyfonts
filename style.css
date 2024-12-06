@@ -3,6 +3,32 @@
   src: url("/assets/tinyfont.ttf") format("truetype");
 }
 
+:root {
+  --background-color: white;
+  --foreground-color: black;
+  --control-color: #eee;
+  --control-active-color: #ddd;
+  --text-dim-color: #ddd;
+  --editor-grid-color: #f3f3f3;
+  --editor-grid-intent-color: #ccc;
+  --editor-grid-select-color: dodgerblue;
+  --outline-color: dodgerblue;
+}
+
+@media (prefers-color-scheme: dark) {
+  :root {
+    --background-color: #111;
+    --foreground-color: white;
+    --control-color: #303030;
+    --control-active-color: #444;
+    --text-dim-color: #444;
+    --editor-grid-color: #161616;
+    --editor-grid-intent-color: #333;
+    --editor-grid-select-color: dodgerblue;
+    --outline-color: dodgerblue;
+  }
+}
+
 * {
   box-sizing: border-box;
 }
@@ -15,15 +41,18 @@ input[type="number"]::-webkit-outer-spin-button {
 
 a {
   text-decoration: none;
+  color: inherit;
 }
 
 input,
 button {
   font: inherit;
+  color: inherit;
 }
 
 :focus {
-  outline-color: black;
+  outline: none;
+  box-shadow: 0 0 0 4px var(--outline-color);
 }
 
 ::selection {
@@ -42,6 +71,8 @@ body {
   padding: 8px;
   font-size: 10pt;
   word-spacing: 4pt;
+  background: var(--background-color);
+  color: var(--foreground-color);
 }
 
 canvas {
@@ -55,12 +86,12 @@ canvas {
   gap: 4px;
   grid-template-columns: repeat(16, 1fr);
   padding: 4px;
-  background-color: #f3f3f3;
+  background-color: var(--editor-grid-color);
 }
 
 .editor-glyph {
   position: relative;
-  background: white;
+  background: var(--background-color);
   padding: 0;
   border: 0;
   display: block;
@@ -74,7 +105,7 @@ canvas {
 
 .editor-glyph:focus,
 .editor-glyph:hover {
-  box-shadow: 0 0 0 4px #ccc;
+  box-shadow: 0 0 0 4px var(--editor-grid-intent-color);
 }
 
 .editor-glyph[data-selected] {
@@ -86,7 +117,7 @@ canvas {
   top: 0;
   left: 0;
   bottom: 0;
-  box-shadow: inset 0 0 0 5px dodgerblue;
+  box-shadow: inset 0 0 0 5px var(--editor-grid-select-color);
   pointer-events: none;
 }
 
@@ -114,23 +145,25 @@ canvas {
   padding: 0;
   margin: 0;
   height: 0;
+  color: var(--foreground-color);
 }
 
 .number-control input {
   border: 0;
-  background-color: #eee;
+  background-color: var(--control-color);
   border-radius: 2px;
   padding: 4px 2px;
   text-align: center;
+  color: var(--foreground-color);
 }
 
 .color-control:hover {
-  background-color: #eee;
+  background-color: var(--control-color);
 }
 
 .checkbox-control:hover,
 .checkbox-control:focus {
-  background-color: #eee;
+  background-color: var(--control-color);
   border-radius: 2px;
 }
 
@@ -138,10 +171,11 @@ canvas {
   border: 0;
   border-radius: 2px;
   cursor: pointer;
+  background-color: var(--control-color);
 }
 
 .button-control:hover {
-  background: #ddd;
+  background-color: var(--control-active-color);
 }
 
 .control-group {
@@ -149,7 +183,7 @@ canvas {
   gap: 4px;
   padding: 4px;
   align-items: center;
-  color: #ddd;
+  color: var(--control-active-color);
 }
 
 .swatch {
@@ -157,7 +191,7 @@ canvas {
   width: 12px;
   height: 12px;
   border-radius: 2px;
-  border: solid 2px black;
+  border: solid 2px var(--foreground-color);
 }
 
 .preview-textarea {
@@ -167,7 +201,17 @@ canvas {
   resize: vertical;
   height: 120px;
   padding: 8px;
-  background-color: #eee;
+  background-color: var(--control-color);
+  color: inherit;
+}
+
+select {
+  background-color: var(--control-color);
+  color: inherit;
+  font-family: inherit;
+  border: 0;
+  padding: 4px 2px;
+  border-radius: 4px;
 }
 
 .grow {

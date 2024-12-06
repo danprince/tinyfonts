@@ -150,6 +150,10 @@ class App {
     return Math.floor(700 / (GRID_COLUMNS * this.font.glyphWidth));
   }
 
+  get isDarkMode() {
+    return window.matchMedia("(prefers-color-scheme: dark)").matches;
+  }
+
   async mount() {
     let snapshotJson = localStorage.snapshot;
     let snapshot = snapshotJson && JSON.parse(snapshotJson);
@@ -248,6 +252,12 @@ class App {
     let dh = font.glyphHeight;
 
     ctx.drawImage(font.texture, sx, sy, sw, sh, dx, dy, dw, dh);
+
+    if (this.isDarkMode) {
+      ctx.globalCompositeOperation = "source-atop";
+      ctx.fillStyle = "white";
+      ctx.fillRect(0, 0, canvas.width, canvas.height);
+    }
   }
 
   /**
