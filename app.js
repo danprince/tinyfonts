@@ -259,8 +259,11 @@ class App {
       image.width === this.font.texture.width &&
       image.height === this.font.texture.height;
 
+    // If the new image has the same dimensions as the previous one, then
+    // assume it's just a tweaked version of the existing font and preserve the
+    // the settings.
     if (hasSameDimensions) {
-      return (this.font = new Font(image, {
+      this.font = new Font(image, {
         glyphWidth: this.font.glyphWidth,
         glyphHeight: this.font.glyphHeight,
         lineHeight: this.font.lineHeight,
@@ -270,13 +273,28 @@ class App {
         xOffsets: this.font.xOffsets,
         yOffsets: this.font.yOffsets,
         codepage: this.font.codepage,
-      }));
+      });
+      return;
     }
 
+    // Otherwise, assume we're creating a brand new font.
+
+    if (!confirm(`Are you sure you want to discard the current font?`)) {
+      return;
+    }
+
+    // We'll guess the glyph sizes, assuming the font's layout is 16x6.
+    let glyphWidth = Math.ceil(image.width / 16);
+    let glyphHeight = Math.ceil(image.height / 6);
+
+    // TODO: Guess the advance widths based on the actual pixels in each glyph
+
     this.font = new Font(image, {
-      glyphWidth: this.font.glyphWidth,
-      glyphHeight: this.font.glyphHeight,
+      glyphWidth,
+      glyphHeight,
     });
+
+    this.showPopup("Created new font!");
   }
 
   /**
