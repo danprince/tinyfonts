@@ -21,7 +21,6 @@ import { drawText, Font, measureText, wrapText } from "./font.js";
  * @prop {number} glyphHeight
  * @prop {number} lineHeight
  * @prop {number} startCharCode
- * @prop {number} endCharCode
  * @prop {Table} advanceWidths
  * @prop {Table} xOffsets
  * @prop {Table} yOffsets
@@ -55,7 +54,6 @@ let emptySnapshot = {
   glyphHeight: 8,
   lineHeight: 9,
   startCharCode: 32,
-  endCharCode: 128,
   // prettier-ignore
   advanceWidths: {33:2,37:4,39:2,40:3,41:3,42:4,44:3,46:2,47:4,58:2,59:3,60:4,62:4,74:6,76:4,77:6,78:6,84:6,87:6,89:6,91:3,92:4,93:3,94:4,96:3,102:4,105:2,106:4,108:4,109:6,113:6,116:4,118:6,119:6,123:4,124:2,125:4},
   xOffsets: {},
@@ -268,7 +266,6 @@ class App {
         glyphHeight: this.font.glyphHeight,
         lineHeight: this.font.lineHeight,
         startCharCode: this.font.startCharCode,
-        endCharCode: this.font.endCharCode,
         advanceWidths: this.font.advanceWidths,
         xOffsets: this.font.xOffsets,
         yOffsets: this.font.yOffsets,
@@ -496,7 +493,6 @@ class App {
       glyphHeight: this.font.glyphHeight,
       lineHeight: this.font.lineHeight,
       startCharCode: this.font.startCharCode,
-      endCharCode: this.font.endCharCode,
       advanceWidths: this.font.advanceWidths,
       xOffsets: this.font.xOffsets,
       yOffsets: this.font.yOffsets,
@@ -530,7 +526,6 @@ class App {
     this.font.glyphHeight = snapshot.glyphHeight;
     this.font.lineHeight = snapshot.lineHeight;
     this.font.startCharCode = snapshot.startCharCode;
-    this.font.endCharCode = snapshot.endCharCode;
     this.font.advanceWidths = snapshot.advanceWidths;
     this.font.xOffsets = snapshot.xOffsets;
     this.font.yOffsets = snapshot.yOffsets;
@@ -554,7 +549,6 @@ class App {
       glyphHeight: this.font.glyphHeight,
       lineHeight: this.font.lineHeight,
       startCharCode: this.font.startCharCode,
-      endCharCode: this.font.endCharCode,
       advanceWidths: this.font.advanceWidths,
       xOffsets: this.font.xOffsets,
       yOffsets: this.font.yOffsets,

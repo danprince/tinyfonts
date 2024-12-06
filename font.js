@@ -10,8 +10,6 @@
  * Defaults to {@link glyphHeight}.
  * @prop {number} [startCharCode] The char code of the first glyph in the font.
  * Defaults to 32 (`" "`).
- * @prop {number} [endCharCode] The char code of the last glyph in the font.
- * Defaults to 128.
  * @prop {Table} [codepage] An optional codepage for mapping glyphs with codes
  * outside the font's normal range.
  * @prop {Table} [advanceWidths] Optional table of advance widths. The advance
@@ -45,11 +43,6 @@ export class Font {
    * @type {number} The char code of the first glyph in the font.
    */
   startCharCode = 0;
-
-  /**
-   * @type {number} The char code of the last glyph in the font.
-   */
-  endCharCode = 0;
 
   /**
    * @type {Record<number, number | undefined>} Optional codepage that
@@ -94,7 +87,6 @@ export class Font {
     this.glyphHeight = settings.glyphHeight;
     this.lineHeight = settings.lineHeight ?? settings.glyphHeight;
     this.startCharCode = settings.startCharCode ?? 32;
-    this.endCharCode = settings.startCharCode ?? 128;
     this.codepage = normalizeGlyphKeys(settings.codepage ?? {});
     this.advanceWidths = normalizeGlyphKeys(settings.advanceWidths ?? {});
     this.xOffsets = normalizeGlyphKeys(settings.xOffsets ?? {});
