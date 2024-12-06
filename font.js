@@ -244,30 +244,38 @@ export function wrapText(font, text, maxWidth) {
   let line = "";
   let width = 0;
 
-  for (let i = 0; i < text.length; i++) {
-    let char = text[i];
-    let code = text.charCodeAt(i);
+  let words = text.split(/(\s)/g);
 
-    // Respect manual line breaks.
-    if (char === "\n") {
+  for (let word of words) {
+    if (word === " ") {
+      line += " ";
+      width += font.advance(32);
+      continue;
+    }
+
+    if (word === "\n") {
       lines.push(line);
       line = "";
       width = 0;
       continue;
     }
 
-    width += font.advance(code);
+    let wordWidth = measureText(font, word).width;
 
-    if (width <= maxWidth) {
-      line += char;
-    } else {
+    if (width + wordWidth > maxWidth) {
       lines.push(line);
-      line = char === " " ? "" : char;
-      width = 0;
+      line = word;
+      width = wordWidth;
+      continue;
     }
+
+    line += word;
+    width += wordWidth;
   }
 
-  if (line.length > 0) {
+  line = line.trim();
+
+  if (line) {
     lines.push(line);
   }
 
