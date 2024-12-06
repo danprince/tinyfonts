@@ -582,7 +582,7 @@ function assert(condition, message = "Assertion failed") {
  */
 async function createFontTextureFromFile(file) {
   let bitmap = await createImageBitmap(file);
-  let canvas = removeBackgroundColor(bitmap);
+  let canvas = normalizeFontTexture(bitmap);
   let image = new Image();
   image.src = canvas.toDataURL();
   return image;
@@ -592,7 +592,7 @@ async function createFontTextureFromFile(file) {
  * @param {ImageBitmap} image
  * @returns {HTMLCanvasElement}
  */
-function removeBackgroundColor(image) {
+function normalizeFontTexture(image) {
   let canvas = document.createElement("canvas");
   let ctx = canvas.getContext("2d");
   assert(ctx);
@@ -607,11 +607,16 @@ function removeBackgroundColor(image) {
 
   for (let i = 0; i < pixels.length; i++) {
     if (pixels[i] === transparent) {
+      // Remove transparent pixels
       pixels[i] = 0;
+    } else {
+      // Make other pixels black
+      pixels[i] = 0xff000000;
     }
   }
 
   ctx.putImageData(imageData, 0, 0);
+
   return canvas;
 }
 
