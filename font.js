@@ -99,6 +99,14 @@ export class Font {
   advance(charCode) {
     return this.advanceWidths[charCode] ?? this.glyphWidth;
   }
+
+  columns() {
+    return Math.ceil(this.texture.width / this.glyphWidth);
+  }
+
+  rows() {
+    return Math.ceil(this.texture.height / this.glyphHeight);
+  }
 }
 
 /**

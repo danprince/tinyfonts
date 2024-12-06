@@ -2,6 +2,11 @@
 import { drawText, Font, measureText, wrapText } from "./font.js";
 
 /**
+ * The number of columns in the editor grid.
+ */
+const GRID_COLUMNS = 16;
+
+/**
  * @typedef {import("./font.js").Table} Table
  *
  * @typedef {object} Snapshot
@@ -103,8 +108,6 @@ fontImage.src = emptySnapshot.textureUrl;
 class App {
   specimens = specimens;
 
-  editorScaling = 5;
-
   selectedCharCode = 32;
 
   popupMessage = "";
@@ -139,6 +142,13 @@ class App {
   previewPadding = 1;
   previewCanvasWidth = 300;
   previewTextWrappingEnabled = true;
+
+  /**
+   * Determines the scale factor used when rendering the glyphs in the editor.
+   */
+  get editorScaling() {
+    return Math.floor(700 / (GRID_COLUMNS * this.font.glyphWidth));
+  }
 
   async mount() {
     let snapshotJson = localStorage.snapshot;
@@ -189,17 +199,9 @@ class App {
     localStorage.snapshot = snapshotJson;
   }
 
-  getEditorColumns() {
-    return Math.ceil(this.font.texture.width / this.font.glyphWidth);
-  }
-
-  getEditorRows() {
-    return Math.ceil(this.font.texture.height / this.font.glyphHeight);
-  }
-
   getEditorGridCells() {
-    let columns = this.getEditorColumns();
-    let rows = this.getEditorRows();
+    let columns = this.font.columns();
+    let rows = this.font.rows();
     let length = columns * rows;
 
     return Array.from({ length }).map((_, index) => {
@@ -231,7 +233,7 @@ class App {
     canvas.style.height = `${canvas.height * this.editorScaling}px`;
 
     let index = charCode - font.startCharCode;
-    let columns = this.getEditorColumns();
+    let columns = font.columns();
     let column = index % columns;
     let row = Math.floor(index / columns);
 
@@ -452,9 +454,9 @@ class App {
     } else if (right) {
       this.selectedCharCode += 1;
     } else if (up) {
-      this.selectedCharCode -= 16;
+      this.selectedCharCode -= GRID_COLUMNS;
     } else if (down) {
-      this.selectedCharCode += 16;
+      this.selectedCharCode += GRID_COLUMNS;
     }
 
     this.renderPreview();
