@@ -149,7 +149,7 @@ export function getColoredTexture(font, color) {
       ctx.fillRect(0, 0, canvas.width, canvas.height);
     }
 
-    if (font.texture.naturalWidth > 0) {
+    if (font.texture.complete && font.texture.naturalWidth > 0) {
       draw();
     } else {
       font.texture.decode().then(draw);
